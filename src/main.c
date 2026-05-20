@@ -127,4 +127,3 @@ int main(int argc, char** argv) //[0]./netdiag [1] check show collect [2] gatewa
     return 0;
 }
 
-
