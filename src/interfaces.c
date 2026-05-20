@@ -6,6 +6,26 @@
 #include <dirent.h>
 #include <limits.h>
 
+int take_data_from_file(const char* field, const struct dirent* entry,
+                        char* path,
+                        char* interface_variable)
+{
+    snprintf(path,
+             sizeof(path),
+             "/sys/class/net/%s/%s",
+             entry->d_name,
+             field);
+
+    if (read_file(path,
+                  interface_variable,
+                  sizeof(interface_variable)) != 0)
+    {
+        strcpy(interface_variable, "unknown");
+        return -1;
+    }
+
+    return 0;
+}
 
 int show_interfaces(void)
 {
@@ -28,46 +48,27 @@ int show_interfaces(void)
     while ((entry = readdir(dir)) != NULL)
     {
         if (strcmp(entry->d_name, ".") == 0 ||
-            strcmp(entry->d_name, "..") == 0)
-        {
-            continue;
-        }
-
+        strcmp(entry->d_name, "..") == 0) continue;
+        
         char path[PATH_MAX];
 
         char state[32] = {0};
         char mac[64] = {0};
         char mtu[32] = {0};
 
-        snprintf(path,
-                 sizeof(path),
-                 "/sys/class/net/%s/operstate",
-                 entry->d_name);
+        take_data_from_file("operstate",
+                            entry,
+                            path,
+                            state);
+        take_data_from_file("address",
+                            entry,
+                            path,
+                            mac);
 
-        if (read_file(path, state, sizeof(state)) != 0)
-        {
-            strcpy(state, "unknown");
-        }
-
-        snprintf(path,
-                 sizeof(path),
-                 "/sys/class/net/%s/address",
-                 entry->d_name);
-
-        if (read_file(path, mac, sizeof(mac)) != 0)
-        {
-            strcpy(mac, "unknown");
-        }
-
-        snprintf(path,
-                 sizeof(path),
-                 "/sys/class/net/%s/mtu",
-                 entry->d_name);
-
-        if (read_file(path, mtu, sizeof(mtu)) != 0)
-        {
-            strcpy(mtu, "unknown");
-        }
+        take_data_from_file("mtu",
+                            entry,
+                            path,
+                            mtu);
 
         printf("%-10s %-10s %-20s %-10s\n",
                entry->d_name,
