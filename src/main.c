@@ -1,16 +1,13 @@
-#include <stdio.h>
+
 #include <string.h>
 #include <stdlib.h>
+
+#include "interfaces.h"
 
 typedef enum { UNKNOWN = 0, CHECK = 1, SHOW = 2, COLLECT = 3, 
                INTERFACES = 11, ROUTES = 12, VLANS = 13, 
                LINK = 21, GATEWAY = 22} Cmd;
 
-int show_interfaces(void) //        ./netdiag show interfaces
-{
-
-    return 0;
-}
 
 int show_routes(void) //            ./netdiag show routes
 {
