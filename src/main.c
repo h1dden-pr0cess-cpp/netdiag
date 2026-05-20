@@ -3,41 +3,12 @@
 #include <stdlib.h>
 
 #include "interfaces.h"
+#include "routes.h"
 
 typedef enum { UNKNOWN = 0, CHECK = 1, SHOW = 2, COLLECT = 3, 
                INTERFACES = 11, ROUTES = 12, VLANS = 13, 
                LINK = 21, GATEWAY = 22} Cmd;
 
-
-int show_routes(void) //            ./netdiag show routes
-{
-
-    return 0;
-}
-
-int show_vlans(void) //             ./netdiag show vlans
-{
-
-    return 0;
-}
-
-int check_link(const char* iface) //./netdiag check link eth0
-{
-
-    return 0;
-}
-
-int check_gateway(const char* ip) //./netdiag check gateway 192.168.1.1
-{
-
-    return 0;
-}
-
-int collect_diagnostics(void) //    ./netdiag collect
-{
-
-    return 0;
-}
 
 
 Cmd parse_cmd(const char *s) {
@@ -77,7 +48,7 @@ int main(int argc, char** argv) //[0]./netdiag [1] check show collect [2] gatewa
                 }
                 case VLANS:
                 {
-                    return show_vlans();
+                    //return show_vlans();
                 }
                 default:
                 {
@@ -95,11 +66,11 @@ int main(int argc, char** argv) //[0]./netdiag [1] check show collect [2] gatewa
             {
                 case LINK:
                 {
-                    return check_link(argv[3]);
+                    //return check_link(argv[3]);
                 }
                 case GATEWAY:
                 {
-                    return check_gateway(argv[3]);
+                    //return check_gateway(argv[3]);
                 }
                 default:
                 {
@@ -113,7 +84,7 @@ int main(int argc, char** argv) //[0]./netdiag [1] check show collect [2] gatewa
         {
             if(argc != 2) break;
 
-            collect_diagnostics();
+            //collect_diagnostics();
             break;
         }
         default:

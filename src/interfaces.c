@@ -6,7 +6,7 @@
 #include <dirent.h>
 #include <limits.h>
 
-int take_data_from_file(const char* field, const struct dirent* entry,
+int read_iface_field(const char* field, const struct dirent* entry,
                         char* path,
                         size_t path_size,
 
@@ -59,20 +59,21 @@ int show_interfaces(void)
         char mac[64] = {0};
         char mtu[32] = {0};
 
-        take_data_from_file("operstate",
+        read_iface_field("operstate",
                             entry,
                             path,
                             sizeof(path),
                             state,
                             sizeof(state));
-        take_data_from_file("address",
+
+        read_iface_field("address",
                             entry,
                             path,
                             sizeof(path),
                             mac,
                             sizeof(mac));
 
-        take_data_from_file("mtu",
+        read_iface_field("mtu",
                             entry,
                             path,
                             sizeof(path),
