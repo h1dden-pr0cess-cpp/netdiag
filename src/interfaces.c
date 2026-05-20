@@ -14,14 +14,14 @@ int take_data_from_file(const char* field, const struct dirent* entry,
                         size_t variable_size)
 {
     snprintf(path,
-             sizeof(path),
+             path_size,
              "/sys/class/net/%s/%s",
              entry->d_name,
              field);
 
     if (read_file(path,
                   interface_variable,
-                  sizeof(interface_variable)) != 0)
+                  variable_size) != 0)
     {
         strcpy(interface_variable, "unknown");
         return -1;
