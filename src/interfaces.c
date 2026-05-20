@@ -8,7 +8,10 @@
 
 int take_data_from_file(const char* field, const struct dirent* entry,
                         char* path,
-                        char* interface_variable)
+                        size_t path_size,
+
+                        char* interface_variable,
+                        size_t variable_size)
 {
     snprintf(path,
              sizeof(path),
@@ -59,16 +62,22 @@ int show_interfaces(void)
         take_data_from_file("operstate",
                             entry,
                             path,
-                            state);
+                            sizeof(path),
+                            state,
+                            sizeof(state));
         take_data_from_file("address",
                             entry,
                             path,
-                            mac);
+                            sizeof(path),
+                            mac,
+                            sizeof(mac));
 
         take_data_from_file("mtu",
                             entry,
                             path,
-                            mtu);
+                            sizeof(path),
+                            mtu,
+                            sizeof(mtu));
 
         printf("%-10s %-10s %-20s %-10s\n",
                entry->d_name,
