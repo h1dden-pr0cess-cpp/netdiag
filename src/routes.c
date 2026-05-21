@@ -3,6 +3,28 @@
 #include <stdio.h>
 #include <string.h>
 
+int parse_route_field(const char* token,
+                      const char* keyword,
+                      char** saveptr,
+                      char* output,
+                      size_t output_size)
+{
+    if (strcmp(token, keyword) == 0)
+    {
+        char* next = strtok_r(NULL, " ", saveptr);
+
+        if (next)
+        {
+            strncpy(output, next, output_size - 1);
+            output[output_size - 1] = '\0';
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 int show_routes(void)
 {
     FILE* fp = popen("ip route", "r");
@@ -26,38 +48,34 @@ int show_routes(void)
         char gateway[64] = "-";
         char iface[64] = "-";
 
-        char* saveptr;
+        char* saveptr = NULL;
 
-        char* token = strtok_r(buffer, " ", &saveptr);
+        char* token = strtok_r(buffer, " \n", &saveptr);
 
         if (token)
         {
-            strcpy(destination, token);
+            strncpy(destination,
+                    token,
+                    sizeof(destination) - 1);
+
+            destination[sizeof(destination) - 1] = '\0';
         }
 
         while (token != NULL)
         {
-            if (strcmp(token, "via") == 0)
-            {
-                token = strtok_r(NULL, " ", &saveptr);
+            parse_route_field(token,
+                              "via",
+                              &saveptr,
+                              gateway,
+                              sizeof(gateway));
 
-                if (token)
-                {
-                    strcpy(gateway, token);
-                }
-            }
+            parse_route_field(token,
+                              "dev",
+                              &saveptr,
+                              iface,
+                              sizeof(iface));
 
-            if (strcmp(token, "dev") == 0)
-            {
-                token = strtok_r(NULL, " ", &saveptr);
-
-                if (token)
-                {
-                    strcpy(iface, token);
-                }
-            }
-
-            token = strtok_r(NULL, " ", &saveptr);
+            token = strtok_r(NULL, " \n", &saveptr);
         }
 
         printf("%-20s %-20s %-10s\n",
