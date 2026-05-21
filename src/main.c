@@ -5,6 +5,8 @@
 #include "interfaces.h"
 #include "routes.h"
 #include "link.h"
+#include "gateway.h"
+#include "vlan.h"
 
 typedef enum { UNKNOWN = 0, CHECK = 1, SHOW = 2, COLLECT = 3, 
                INTERFACES = 11, ROUTES = 12, VLANS = 13, 
@@ -14,14 +16,14 @@ typedef enum { UNKNOWN = 0, CHECK = 1, SHOW = 2, COLLECT = 3,
 
 Cmd parse_cmd(const char *s) {
     if (s == NULL)                      return UNKNOWN;
-    if (strcmp(s, "check") == 0)        return CHECK;
-    if (strcmp(s, "show")  == 0)        return SHOW;
-    if (strcmp(s, "collect") == 0)      return COLLECT;
+    if (strcmp(s, "check")      == 0)   return CHECK;
+    if (strcmp(s, "show")       == 0)   return SHOW;
+    if (strcmp(s, "collect")    == 0)   return COLLECT;
     if (strcmp(s, "interfaces") == 0)   return INTERFACES;
-    if (strcmp(s, "routes")  == 0)      return ROUTES;
-    if (strcmp(s, "vlans") == 0)        return VLANS;
-    if (strcmp(s, "link") == 0)         return LINK;
-    if (strcmp(s, "gateway")  == 0)     return GATEWAY;
+    if (strcmp(s, "routes")     == 0)   return ROUTES;
+    if (strcmp(s, "vlans")      == 0)   return VLANS;
+    if (strcmp(s, "link")       == 0)   return LINK;
+    if (strcmp(s, "gateway")    == 0)   return GATEWAY;
    
 
     return UNKNOWN;
@@ -49,7 +51,7 @@ int main(int argc, char** argv) //[0]./netdiag [1] check show collect [2] gatewa
                 }
                 case VLANS:
                 {
-                    //return show_vlans();
+                    return show_vlans();
                 }
                 default:
                 {
@@ -71,7 +73,7 @@ int main(int argc, char** argv) //[0]./netdiag [1] check show collect [2] gatewa
                 }
                 case GATEWAY:
                 {
-                    //return check_gateway(argv[3]);
+                    return check_gateway(argv[3]);
                 }
                 default:
                 {
@@ -85,7 +87,7 @@ int main(int argc, char** argv) //[0]./netdiag [1] check show collect [2] gatewa
         {
             if(argc != 2) break;
 
-            //collect_diagnostics();
+            // return collect_diagnostics();
             break;
         }
         default:

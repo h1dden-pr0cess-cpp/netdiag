@@ -1,14 +1,9 @@
 #include "utils.h"
 
 #include <stdio.h>
-#include <string.h>
 #include <dirent.h>
 #include <limits.h>
 
-#include "utils.h"
-
-
-    
 
 int check_link(const char* iface) //eth0
 {
