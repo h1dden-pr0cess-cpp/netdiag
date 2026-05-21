@@ -30,6 +30,51 @@ int read_iface_field(const char* field, const struct dirent* entry,
     return 0;
 }
 
+int read_iface_ip(const char* iface, char* ip, size_t size)
+{
+    char cmd[128];
+    snprintf(cmd, sizeof(cmd),
+             "ip -4 addr show dev %s", iface);
+
+    FILE* fp = popen(cmd, "r");
+    if (!fp)
+    {
+        snprintf(ip, size, "unknown");
+        return 1;
+    }
+
+    char line[256];
+    ip[0] = '\0';
+
+    while (fgets(line, sizeof(line), fp))
+    {
+        char* start = strstr(line, "inet ");
+
+        if (start)
+        {
+            start += 5;
+
+            char* slash = strchr(start, '/');
+
+            if (slash)
+                *slash = '\0';
+
+            strncpy(ip, start, size - 1);
+            ip[size - 1] = '\0';
+
+            break;
+        }
+    }
+
+    pclose(fp);
+
+    if (ip[0] == '\0')
+        snprintf(ip, size, "-");
+
+    return 0;
+}
+
+
 int show_interfaces(void)
 {
     DIR* dir = opendir("/sys/class/net");
@@ -40,11 +85,12 @@ int show_interfaces(void)
         return 1;
     }
 
-    printf("%-10s %-10s %-20s %-10s\n",
+    printf("%-10s %-10s %-20s %-10s %-16s\n",
            "IFACE",
            "STATE",
            "MAC",
-           "MTU");
+           "MTU",
+           "IP");
 
     struct dirent* entry;
 
@@ -58,33 +104,39 @@ int show_interfaces(void)
         char state[32] = {0};
         char mac[64] = {0};
         char mtu[32] = {0};
+        char ip[64] = {0};
 
         read_iface_field("operstate",
-                            entry,
-                            path,
-                            sizeof(path),
-                            state,
-                            sizeof(state));
+                         entry,
+                         path,
+                         sizeof(path),
+                         state,
+                         sizeof(state) );
 
         read_iface_field("address",
-                            entry,
-                            path,
-                            sizeof(path),
-                            mac,
-                            sizeof(mac));
+                         entry,
+                         path,
+                         sizeof(path),
+                         mac,
+                         sizeof(mac)   );
 
         read_iface_field("mtu",
-                            entry,
-                            path,
-                            sizeof(path),
-                            mtu,
-                            sizeof(mtu));
+                         entry,
+                         path,
+                         sizeof(path),
+                         mtu,
+                         sizeof(mtu)   );
 
-        printf("%-10s %-10s %-20s %-10s\n",
+        read_iface_ip(   entry->d_name, 
+                         ip, 
+                         sizeof(ip)    );
+
+        printf("%-10s %-10s %-20s %-10s %-18s\n",
                entry->d_name,
                state,
                mac,
-               mtu);
+               mtu,
+               ip);
     }
 
     closedir(dir);
