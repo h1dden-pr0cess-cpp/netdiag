@@ -38,22 +38,24 @@ int show_interfaces(void)
         char mtu[32] = {0};
         char ip[64] = {0};
 
+
+
         read_iface_field("operstate",
-                         entry,
+                         entry->d_name,
                          path,
                          sizeof(path),
                          state,
                          sizeof(state) );
 
         read_iface_field("address",
-                         entry,
+                         entry->d_name,
                          path,
                          sizeof(path),
                          mac,
                          sizeof(mac)   );
 
         read_iface_field("mtu",
-                         entry,
+                         entry->d_name,
                          path,
                          sizeof(path),
                          mtu,

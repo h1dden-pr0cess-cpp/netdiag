@@ -26,7 +26,8 @@ int read_file(const char* path, char* buffer, size_t size)
     return 0;
 }
 
-int read_iface_field(const char* field, const struct dirent* entry,
+
+int read_iface_field(const char* field, const char* iface,
                         char* path,
                         size_t path_size,
 
@@ -36,7 +37,7 @@ int read_iface_field(const char* field, const struct dirent* entry,
     snprintf(path,
              path_size,
              "/sys/class/net/%s/%s",
-             entry->d_name,
+             iface,
              field);
 
     if (read_file(path,

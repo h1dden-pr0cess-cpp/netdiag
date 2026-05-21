@@ -4,6 +4,7 @@
 
 #include "interfaces.h"
 #include "routes.h"
+#include "link.h"
 
 typedef enum { UNKNOWN = 0, CHECK = 1, SHOW = 2, COLLECT = 3, 
                INTERFACES = 11, ROUTES = 12, VLANS = 13, 
@@ -66,7 +67,7 @@ int main(int argc, char** argv) //[0]./netdiag [1] check show collect [2] gatewa
             {
                 case LINK:
                 {
-                    //return check_link(argv[3]);
+                    return check_link(argv[3]);
                 }
                 case GATEWAY:
                 {

@@ -6,7 +6,7 @@
 
 int read_file(const char* path, char* buffer, size_t size);
 
-int read_iface_field(const char* field, const struct dirent* entry,
+int read_iface_field(const char* field, const char* iface,
                         char* path,
                         size_t path_size,
                         char* interface_variable,
