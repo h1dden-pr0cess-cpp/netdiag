@@ -7,6 +7,7 @@
 #include "link.h"
 #include "gateway.h"
 #include "vlan.h"
+#include "collect.h"
 
 typedef enum { UNKNOWN = 0, CHECK = 1, SHOW = 2, COLLECT = 3, 
                INTERFACES = 11, ROUTES = 12, VLANS = 13, 
@@ -86,9 +87,7 @@ int main(int argc, char** argv) //[0]./netdiag [1] check show collect [2] gatewa
         case COLLECT:
         {
             if(argc != 2) break;
-
-            // return collect_diagnostics();
-            break;
+            return collect_diagnostics();
         }
         default:
         {

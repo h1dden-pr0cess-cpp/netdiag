@@ -1,3 +1,4 @@
+#include "link.h"
 #include "utils.h"
 
 #include <stdio.h>
